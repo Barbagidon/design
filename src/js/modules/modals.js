@@ -1,29 +1,73 @@
 const modals = () => {
+    let btnPressed = false;
 
-    function modalContent(trigger, item, closeTrigger, ) {
+    function modalContent(trigger, item, closeTriggerSelector, closeBackSelector) {
+
+
         const btn = document.querySelectorAll(trigger),
             pop = document.querySelector(item),
-            close = document.querySelector(closeTrigger),
+            close = document.querySelectorAll(closeTriggerSelector),
+            closeBack = document.querySelectorAll(closeBackSelector),
             activeClass = 'show',
             hideClass = 'hide',
-
+            windows = document.querySelectorAll('[data-modal'),
             scroll = hideScroll();
 
 
-        function hideContent(item, activeClass, hideClass) {
-            item.classList.remove(activeClass);
-            item.classList.add(hideClass);
-            document.body.style.overflow = '';
-            document.body.style.marginRight = `0px`;
-
-        }
-
-        function showContent(pop) {
+        function showContent() {
+            addAnimation('fadeIn', pop);
             pop.classList.add(activeClass);
             pop.classList.remove(hideClass);
             document.body.style.overflow = 'hidden';
             document.body.style.marginRight = `${scroll}px`;
+            triggerJump();
+
+
+            btnPressed = true;
         }
+
+        function addAnimation(selector, pop) {
+            pop.classList.add('animated', selector);
+        }
+
+
+
+
+
+
+
+        function hideContent() {
+            pop.classList.remove(activeClass);
+            pop.classList.add(hideClass);
+            document.body.style.overflow = '';
+            document.body.style.marginRight = `0px`;
+            const gift = document.querySelector('.fixed-gift');
+            gift.style.right = '';
+
+        }
+
+        function showHideContent(trigger, func, active = '') {
+            trigger.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    let target = e.target;
+                    if (target && target.classList.contains('pulse')) {
+                        item.style.display = 'none';
+                    }
+                    if (!active) {
+                        func();
+                    } else {
+                        if (target && target.classList.contains(active)) {
+                            func();
+                        }
+                    }
+
+                });
+            });
+        }
+        showHideContent(btn, showContent);
+        showHideContent(close, hideContent);
+        showHideContent(closeBack, hideContent, 'popup-design');
+        showHideContent(closeBack, hideContent, 'popup-consultation');
 
         function hideScroll() {
             const div = document.createElement('div');
@@ -34,69 +78,65 @@ const modals = () => {
             div.style.visibility = 'hidden';
             const result = div.offsetWidth - div.clientWidth;
             return result;
-
         }
 
-        function showHidePop(trigger, item, closeTrigger) {
-
-
-            trigger.addEventListener('click', (e) => {
-                let target = e.target;
-                if (target && target.classList.contains('pulse')) {
-                    trigger.style.display = 'none';
-                }
-                showContent(pop);
-
-            });
-            item.addEventListener('click', (e) => {
-                let target = e.target;
-                if (target && target == closeTrigger || target == item) {
-                    if (target && target.classList.contains('popup-gift popup-close') || target.classList.contains('popup-gift')) {
-                        trigger.style.display = 'inline';
-                    }
-                    hideContent(item, 'show', 'hide');
-                }
-            });
+        function triggerJump() {
+            const gift = document.querySelector('.fixed-gift');
+            gift.style.right = `${+getComputedStyle(gift).right.replace(/\D/ig, '') + scroll}px`;
 
         }
 
 
-        btn.forEach(item => {
-            showHidePop(item, pop, close);
-        });
 
-        function setTimer(showSelector, checkSelector, time) {
+        function showModalByTime(selector) {
             setTimeout(() => {
-                let display;
-                const windows = document.querySelectorAll(checkSelector);
-                const showElem = document.querySelector(showSelector);
+                let showMode;
                 windows.forEach(item => {
-                    if (getComputedStyle(item).display != 'none') {
-                        display = 'block';
-                        
+                    if (getComputedStyle(item).display !== 'none') {
+                        showMode = 'block';
                     }
                 });
-                if (!display) {
-                    showContent(showElem);
+
+                if (!showMode) {
+                    const popup = document.querySelector(selector);
+                    popup.style.display = 'block';
+                    addAnimation('fadeIn', popup);
+
+
                 }
-    
-            }, time);
-    
+            }, 3000000);
+
         }
 
 
-        // setTimer(".popup-consultation", "[data-modal]", 3000);
+        showModalByTime('.popup-consultation');
 
 
+
+
+        document.body.addEventListener('click', (e) => {
+            console.log(e.target);
+
+        });
 
     }
 
-   
+    function openByScroll(selector) {
+        window.addEventListener('scroll', () => {
+            let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
 
-    modalContent('.button-design', '.popup-design', '.popup-design .popup-close');
-    modalContent('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-    modalContent('.pulse', '.popup-gift', '.popup-gift .popup-close');
-    
+            if (!btnPressed && (window.pageYOffset + document.documentElement.clientHeight >= scrollHeight)) {
+                document.querySelector(selector).click();
+            }
+
+        });
+    }
+
+
+    modalContent('.button-design', '.popup-design', '.popup-close', '.popup-design');
+    modalContent('.button-consultation', '.popup-consultation', '.popup-close', '.popup-consultation');
+    modalContent('.pulse', '.popup-gift', '.popup-close', '.popup-gift');
+    openByScroll('.fixed-gift');
 
 };
 
