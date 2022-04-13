@@ -11,13 +11,23 @@ const modals = () => {
             activeClass = 'show',
             hideClass = 'hide',
             windows = document.querySelectorAll('[data-modal'),
-            scroll = hideScroll();
+            scroll = hideScroll(),
+            forms = document.querySelectorAll('form');
 
 
         function showContent() {
             addAnimation('fadeIn', pop);
+            windows.forEach(window => {
+                window.classList.remove('fadeOutDown');
+                addAnimation('fadeInUp', window);
+            });
+            forms.forEach(form => {
+                form.classList.add('animated','fadeInDown');
+
+            });
             pop.classList.add(activeClass);
             pop.classList.remove(hideClass);
+
             document.body.style.overflow = 'hidden';
             document.body.style.marginRight = `${scroll}px`;
             triggerJump();
@@ -37,8 +47,17 @@ const modals = () => {
 
 
         function hideContent() {
-            pop.classList.remove(activeClass);
-            pop.classList.add(hideClass);
+            windows.forEach(window => {
+                window.classList.remove('fadeInUp');
+                addAnimation('fadeOutDown', window);
+
+            });
+            setTimeout(() => {
+                pop.classList.remove(activeClass);
+                pop.classList.add(hideClass);
+
+            }, 700);
+
             document.body.style.overflow = '';
             document.body.style.marginRight = `0px`;
             const gift = document.querySelector('.fixed-gift');
@@ -68,6 +87,10 @@ const modals = () => {
         showHideContent(close, hideContent);
         showHideContent(closeBack, hideContent, 'popup-design');
         showHideContent(closeBack, hideContent, 'popup-consultation');
+        showHideContent(closeBack, hideContent, 'popup-gift');
+
+
+       
 
         function hideScroll() {
             const div = document.createElement('div');
@@ -114,10 +137,10 @@ const modals = () => {
 
 
 
-        document.body.addEventListener('click', (e) => {
-            console.log(e.target);
+        // document.body.addEventListener('click', (e) => {
+        //     console.log(e.target);
 
-        });
+        // });
 
     }
 
