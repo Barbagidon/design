@@ -1,8 +1,14 @@
+import {
+    postData
+} from "./services/requests";
+
+
 const forms = () => {
     'use strict';
     const forms = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('input'),
-        upload = document.querySelectorAll('[name="upload"]');
+        upload = document.querySelectorAll('[name="upload"]'),
+        textarea = document.querySelectorAll('textarea');
 
 
 
@@ -19,24 +25,21 @@ const forms = () => {
         question: 'assets/question.php'
     };
 
-    const postData = async (url, data) => {
-        let res = await fetch(url, {
-            method: 'POST',
-            body: data,
-        });
-
-        return await res.text();
-    };
 
     function formClear(input) {
         input.forEach(item => {
             item.value = '';
+        });
+        textarea.forEach(item => {
+            item.value = '';
+
         });
         upload.forEach(item => {
             item.previousElementSibling.textContent = 'Файл не выбран';
 
         });
     }
+
 
 
     upload.forEach(item => {
@@ -71,7 +74,8 @@ const forms = () => {
 
                 let link;
                 let data = new FormData(form);
-                form.closest('.popup-design') || form.classList.contains('calc_form') ? link = path.designer : link = path.question;
+                console.log(data);
+                form.closest('.popup-design') || form.classList.contains('calc_form')? link = path.designer : link = path.question;
 
                 const makeFormContent = (src, text) => {
                     form.classList.add('animated', 'fadeOutLeft');

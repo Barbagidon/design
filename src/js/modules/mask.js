@@ -35,7 +35,7 @@ const mask = (selector) => {
             return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? "" : a;
         });
 
-       
+
 
         if (this.value.charAt(1) != '7') {
             this.value = '';
@@ -43,10 +43,10 @@ const mask = (selector) => {
         }
 
         if (event.type === 'blur') {
-            if (this.value.length) {
+            if (this.value.length <= 2) {
                 this.value = '';
             }
-        }  else {
+        } else {
             setCursorPosition(this.value.length, this);
         }
 
