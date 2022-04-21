@@ -55,8 +55,8 @@ const sliders = (slides, dir, prev, next) => {
         } else {
             paused = setInterval(() => {
                 showSlides(1);
-                items[slideIndex - 1].classList.remove('fadeInRightBig');
-                items[slideIndex - 1].classList.add('fadeInRightBig');
+                items[slideIndex - 1].classList.remove('fadeInDown');
+                items[slideIndex - 1].classList.add('fadeInDown');
 
 
             }, 3000);
