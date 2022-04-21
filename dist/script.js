@@ -5307,8 +5307,8 @@ var showMoreStyles = function showMoreStyles(trigger, wrapperSelector) {
   var btn = document.querySelector(trigger),
       wrapper = document.querySelector(wrapperSelector);
   btn.addEventListener('click', function (e) {
-    Object(_services_requests__WEBPACK_IMPORTED_MODULE_3__["getResource"])('http://localhost:3000/styles').then(function (res) {
-      res.forEach(function (_ref) {
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_3__["getResource"])('assets/db.json').then(function (res) {
+      res.styles.forEach(function (_ref) {
         var src = _ref.src,
             title = _ref.title,
             link = _ref.link;

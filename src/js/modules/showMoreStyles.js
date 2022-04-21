@@ -9,9 +9,9 @@ const showMoreStyles = (trigger, wrapperSelector) => {
 
 
     btn.addEventListener('click', (e) => {
-        getResource('http://localhost:3000/styles')
+        getResource('assets/db.json')
             .then(res => {
-                res.forEach(({
+                res.styles.forEach(({
                     src,
                     title,
                     link
